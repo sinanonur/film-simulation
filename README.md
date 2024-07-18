@@ -12,6 +12,21 @@ This Python script applies various film simulation profiles to digital images, a
 - Optional parallel processing for improved performance
 - Custom film profiles via JSON configuration
 
+## Examples
+
+| Original Image                      | Kodak Portra 400                  | Fuji Superia 400                    |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Original](examples/picture.jpg)   | ![Kodak Portra 400](examples/picture_Kodak_Portra_400.jpg) | ![Fuji Superia 400](examples/picture_Fuji_Superia_400.jpg) |
+
+| Ilford HP5 Plus 400                 | Kodak Ektar 100                   | Kodachrome 64                       |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Ilford HP5 Plus 400](examples/picture_Ilford_HP5_Plus_400.jpg) | ![Kodak Ektar 100](examples/picture_Kodak_Ektar_100.jpg) | ![Kodachrome 64](examples/picture_Kodachrome_64.jpg) |
+
+| Fujifilm Velvia 50                  |                                   |                                     |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Fujifilm Velvia 50](examples/picture_Fujifilm_Velvia_50.jpg)    |                                   |                                     |
+
+
 ## Requirements
 
 - Python 3.6+
