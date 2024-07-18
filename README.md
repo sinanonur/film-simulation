@@ -14,9 +14,16 @@ This Python script applies various film simulation profiles to digital images, a
 
 ## Examples
 
-| Original Image                      | Kodak Portra 400                  | Fuji Superia 400                    |
+
+| Original Image                  |                                   |                                     |
 |-------------------------------------|-----------------------------------|-------------------------------------|
-| ![Original](examples/picture.jpg)   | ![Kodak Portra 400](examples/picture_Kodak_Portra_400.jpg) | ![Fuji Superia 400](examples/picture_Fuji_Superia_400.jpg) |
+| ![Original](examples/picture.jpg)   |                                   |
+
+
+
+| Fujifilm Velvia 50                  | Kodak Portra 400                  | Fuji Superia 400                    |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Fujifilm Velvia 50](examples/picture_Fujifilm_Velvia_50.jpg)    | ![Kodak Portra 400](examples/picture_Kodak_Portra_400.jpg) | ![Fuji Superia 400](examples/picture_Fuji_Superia_400.jpg) |
 
 | Ilford HP5 Plus 400                 | Kodak Ektar 100                   | Kodachrome 64                       |
 |-------------------------------------|-----------------------------------|-------------------------------------|
