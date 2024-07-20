@@ -11,7 +11,7 @@ import multiprocessing
 from functools import partial
 
 class FilmProfile:
-    def __init__(self, name, color_curves, contrast, saturation, chromatic_aberration, blur, base_color, grain_amount, grain_size):
+    def __init__(self, name, color_curves, contrast, saturation, chromatic_aberration, blur, base_color, grain_amount, grain_size, advanced_curve=None):
         self.name = name
         self.color_curves = color_curves
         self.contrast = contrast
@@ -21,6 +21,7 @@ class FilmProfile:
         self.base_color = base_color
         self.grain_amount = grain_amount
         self.grain_size = grain_size
+        self.advanced_curve = advanced_curve
 
 def create_curve(curve_data):
     x = np.array(curve_data['x'])
@@ -37,6 +38,7 @@ def load_film_profiles_from_json(json_path):
             channel: create_curve(curve_data)
             for channel, curve_data in data['color_curves'].items()
         }
+        advanced_curve = data.get('advanced_curve', None)
         profiles[name] = FilmProfile(
             name,
             color_curves=color_curves,
@@ -46,7 +48,8 @@ def load_film_profiles_from_json(json_path):
             blur=data.get('blur', 0),
             base_color=tuple(data.get('base_color', (255, 255, 255))),
             grain_amount=data.get('grain_amount', 0),
-            grain_size=data.get('grain_size', 1)
+            grain_size=data.get('grain_size', 1),
+            advanced_curve=advanced_curve
         )
     return profiles
 
@@ -55,6 +58,52 @@ def apply_color_curves(image, curves):
     for i, channel in enumerate(['R', 'G', 'B']):
         result[:,:,i] = curves[channel](image[:,:,i])
     return result
+
+def interpolate_circular(x, y, new_x):
+    # Interpolate considering the circular nature of hue values (0-360 degrees)
+    x_extended = np.concatenate((x, x + 360))
+    y_extended = np.concatenate((y, y))
+    interp_func = interp1d(x_extended, y_extended, kind='cubic')
+    return interp_func(new_x % 360)
+
+def apply_advanced_curve(image, advanced_curve):
+    hsv_image = colour.RGB_to_HSV(image)
+    hue_values = np.array(advanced_curve['hue_values'])
+    saturation_multipliers = np.array(advanced_curve['saturation_multipliers'])
+    hue_shifts = np.array(advanced_curve['hue_shifts'])
+    value_multipliers = np.array(advanced_curve['value_multipliers'])
+
+    hue = hsv_image[:,:,0] * 360  # Convert to degrees
+    saturation = hsv_image[:,:,1]
+    value = hsv_image[:,:,2]
+
+    # Interpolate saturation multipliers
+    interp_saturation_multipliers = interpolate_circular(hue_values, saturation_multipliers, hue)
+
+    # Apply saturation multipliers with a curve to prevent blowout
+    max_saturation = 1.0
+    interp_saturation_multipliers = np.clip(interp_saturation_multipliers, 0, max_saturation / saturation)
+
+    saturation *= interp_saturation_multipliers
+
+    # Interpolate hue shifts and apply them
+    interp_hue_shifts = interpolate_circular(hue_values, hue_shifts, hue)
+    hue = (hue + interp_hue_shifts) % 360
+
+    # Interpolate value multipliers and apply them
+    interp_value_multipliers = interpolate_circular(hue_values, value_multipliers, hue)
+
+    # Apply value multipliers with a curve to prevent blowout
+    max_value = 1.0
+    interp_value_multipliers = np.clip(interp_value_multipliers, 0, max_value / value)
+
+    value *= interp_value_multipliers
+
+    hsv_image[:,:,0] = hue / 360  # Convert back to [0, 1] range
+    hsv_image[:,:,1] = saturation
+    hsv_image[:,:,2] = value
+
+    return colour.HSV_to_RGB(hsv_image)
 
 def apply_chromatic_aberration_pil(img, strength):
     width, height = img.size
@@ -113,12 +162,20 @@ def cross_process(image):
     
     return image
 
-def apply_film_profile(img, profile, chroma_override=None, blur_override=None, color_temp=6500, cross_process_flag=False):
+def apply_film_profile(img, profile, chroma_override=None, blur_override=None, color_temp=6500, cross_process_flag=False, curve_type="auto"):
     img_array = np.array(img).astype(np.float32) / 255.0
     
     img_linear = colour.models.eotf_sRGB(img_array)
     
-    img_color_adjusted = apply_color_curves(img_linear, profile.color_curves)
+    if curve_type == "advanced" or (curve_type == "auto" and profile.advanced_curve):
+        img_color_adjusted = apply_advanced_curve(img_linear, profile.advanced_curve)
+    elif curve_type == "color" or (curve_type == "auto" and not profile.advanced_curve):
+        img_color_adjusted = apply_color_curves(img_linear, profile.color_curves)
+    elif curve_type == "both":
+        if profile.color_curves:
+            img_color_adjusted = apply_color_curves(img_linear, profile.color_curves)
+        if profile.advanced_curve:
+            img_color_adjusted = apply_advanced_curve(img_color_adjusted, profile.advanced_curve)
     
     img_srgb = colour.models.eotf_inverse_sRGB(img_color_adjusted)
     
@@ -150,7 +207,7 @@ def apply_film_profile(img, profile, chroma_override=None, blur_override=None, c
     return img_saturated
 
 def process_image(args):
-    image_path, profile, chroma_override, blur_override, color_temp, cross_process_flag, output_filename = args
+    image_path, profile, chroma_override, blur_override, color_temp, cross_process_flag, curve_type, output_filename = args
     with Image.open(image_path) as img:
         exif_data = img.getexif()
         
@@ -158,7 +215,7 @@ def process_image(args):
         if orientation in [3, 6, 8]:
             img = img.rotate({3: 180, 6: 270, 8: 90}[orientation], expand=True)
         
-        processed_image = apply_film_profile(img, profile, chroma_override, blur_override, color_temp, cross_process_flag)
+        processed_image = apply_film_profile(img, profile, chroma_override, blur_override, color_temp, cross_process_flag, curve_type)
 
         if exif_data:
             exif_data[274] = 1
@@ -175,13 +232,12 @@ def get_optimal_pool_size(target_memory_usage=75):
     available_memory = 100 - get_memory_usage()
     cpu_count = multiprocessing.cpu_count()
     
-    # Start with all CPUs and reduce until we're under the target memory usage
     for i in range(cpu_count, 0, -1):
         estimated_memory_usage = get_memory_usage() + (available_memory / cpu_count) * i
         if estimated_memory_usage <= target_memory_usage:
             return i
     
-    return 1  # Fallback to single process if we can't meet the memory target
+    return 1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Apply film profiles to an image.")
@@ -191,6 +247,7 @@ if __name__ == "__main__":
     parser.add_argument("--blur", type=float, help="Override blur amount")
     parser.add_argument("--color_temp", type=int, default=6500, help="Color temperature (default: 6500K)")
     parser.add_argument("--cross_process", action="store_true", help="Apply cross-processing effect")
+    parser.add_argument("--curve", choices=["color", "advanced", "both"], default="auto", help="Type of curve to apply (color, advanced, both)")
     parser.add_argument("--parallel", action="store_true", help="Enable parallel processing")
     args = parser.parse_args()
 
@@ -205,7 +262,7 @@ if __name__ == "__main__":
     process_args = []
     for profile_name, profile in film_profiles.items():
         output_filename = f"{input_path_base}_{profile_name.replace(' ', '_')}.jpg"
-        process_args.append((args.input_image, profile, args.chroma, args.blur, args.color_temp, args.cross_process, output_filename))
+        process_args.append((args.input_image, profile, args.chroma, args.blur, args.color_temp, args.cross_process, args.curve, output_filename))
 
     if args.parallel:
         pool_size = get_optimal_pool_size()
