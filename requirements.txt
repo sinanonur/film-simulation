@@ -1,0 +1,7 @@
+gradio
+numpy
+Pillow
+colour-science
+scipy
+piexif
+psutil
