@@ -24,7 +24,7 @@
       "chromatic_aberration": 0.3,
       "blur": 0.2,
       "base_color": [250, 255, 255],
-      "grain_amount": 0.04,
+      "grain_amount": 0.02,
       "grain_size": 2
     },
     "Kodak Ektar 100": {
@@ -94,7 +94,7 @@
       "chromatic_aberration": 0.2,
       "blur": 0.1,
       "base_color": [252, 255, 255],
-      "grain_amount": 0.035,
+      "grain_amount": 0.02,
       "grain_size": 2
     },
     "Kodak Gold 200": {
@@ -108,7 +108,7 @@
       "chromatic_aberration": 0.3,
       "blur": 0.15,
       "base_color": [255, 248, 240],
-      "grain_amount": 0.04,
+      "grain_amount": 0.02,
       "grain_size": 2
     },
     "Fuji Provia 100F": {
@@ -150,7 +150,7 @@
       "chromatic_aberration": 0.4,
       "blur": 0.2,
       "base_color": [255, 245, 240],
-      "grain_amount": 0.06,
+      "grain_amount": 0.03,
       "grain_size": 3
     },
     "CineStill 800T": {
