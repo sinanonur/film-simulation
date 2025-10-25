@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Film Simulation</string>
+
+    <!-- Main Screen -->
+    <string name="gallery_title">Gallery</string>
+    <string name="editor_title">Editor</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Editor -->
+    <string name="select_profile">Select Film Profile</string>
+    <string name="export">Export</string>
+    <string name="compare">Compare</string>
+    <string name="processing">Processing…</string>
+    <string name="apply_filter">Apply Filter</string>
+
+    <!-- Film Profiles -->
+    <string name="kodak_portra_400">Kodak Portra 400</string>
+    <string name="fuji_velvia_50">Fuji Velvia 50</string>
+    <string name="kodak_ektar_100">Kodak Ektar 100</string>
+    <string name="fuji_superia_400">Fuji Superia 400</string>
+    <string name="ilford_hp5_plus">Ilford HP5 Plus</string>
+    <string name="kodak_tri_x_400">Kodak Tri-X 400</string>
+
+    <!-- Errors -->
+    <string name="error_loading_image">Failed to load image</string>
+    <string name="error_processing">Processing failed</string>
+    <string name="error_no_profiles">No film profiles found</string>
+
+    <!-- Permissions -->
+    <string name="permission_required">Storage permission required</string>
+    <string name="grant_permission">Grant Permission</string>
+
+    <!-- Empty States -->
+    <string name="no_images">No images found</string>
+    <string name="select_image">Select an image to get started</string>
+</resources>
