@@ -14,22 +14,29 @@ This Python script applies various film simulation profiles to digital images, a
 
 ## Examples
 
+### Original Image
 
-| Original Image                  |                                   |                                     |
-|-------------------------------------|-----------------------------------|-------------------------------------|
-| ![Original](examples/picture.jpg)   |                                   |
-
-
-
-| Fujifilm Velvia 50                  | Kodak Portra 400                  | Fuji Superia 400                    |
-|-------------------------------------|-----------------------------------|-------------------------------------|
-| ![Fujifilm Velvia 50](examples/picture_Fujifilm_Velvia_50.jpg)    | ![Kodak Portra 400](examples/picture_Kodak_Portra_400.jpg) | ![Fuji Superia 400](examples/picture_Fuji_Superia_400.jpg) |
-
-| Ilford HP5 Plus 400                 | Kodak Ektar 100                   | Kodachrome 64                       |
-|-------------------------------------|-----------------------------------|-------------------------------------|
-| ![Ilford HP5 Plus 400](examples/picture_Ilford_HP5_Plus_400.jpg) | ![Kodak Ektar 100](examples/picture_Kodak_Ektar_100.jpg) | ![Kodachrome 64](examples/picture_Kodachrome_64.jpg) |
+![Original](examples/picture.jpg)
 
 Original Image [Source](https://www.peakpx.com/593470/rainbow-color-hot-air-balloon)
+
+### Film Simulations
+
+| Fuji Velvia 50                  | Kodak Portra 400                  | Fuji Superia 400                    |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Fuji Velvia 50](examples/picture_Fuji_Velvia_50.jpg)    | ![Kodak Portra 400](examples/picture_Kodak_Portra_400.jpg) | ![Fuji Superia 400](examples/picture_Fuji_Superia_400.jpg) |
+
+| Ilford HP5 Plus                 | Kodak Ektar 100                   | Kodak Tri-X 400                       |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Ilford HP5 Plus](examples/picture_Ilford_HP5_Plus.jpg) | ![Kodak Ektar 100](examples/picture_Kodak_Ektar_100.jpg) | ![Kodak Tri-X 400](examples/picture_Kodak_Tri-X_400.jpg) |
+
+| Fuji Pro 400H                  | Fuji Provia 100F                  | Kodak Gold 200                    |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![Fuji Pro 400H](examples/picture_Fuji_Pro_400H.jpg)    | ![Fuji Provia 100F](examples/picture_Fuji_Provia_100F.jpg) | ![Kodak Gold 200](examples/picture_Kodak_Gold_200.jpg) |
+
+| CineStill 800T                 | Kodak Ektachrome E100                   | Lomography Color Negative 400                       |
+|-------------------------------------|-----------------------------------|-------------------------------------|
+| ![CineStill 800T](examples/picture_CineStill_800T.jpg) | ![Kodak Ektachrome E100](examples/picture_Kodak_Ektachrome_E100.jpg) | ![Lomography Color Negative 400](examples/picture_Lomography_Color_Negative_400.jpg) |
 
 ## Requirements
 
