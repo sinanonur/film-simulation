@@ -1,8 +1,14 @@
-# Film Simulation Script
+# Film Simulation
 
-This Python script applies various film simulation profiles to digital images, allowing you to emulate the look of popular film stocks. It supports both sequential and parallel processing, and allows for custom film profiles through JSON configuration.
+Transform your digital photos with authentic film simulation profiles, emulating the look of popular film stocks.
 
-## Features
+**Available Implementations:**
+- 🐍 **Python (Original)** - Desktop batch processing
+- 📱 **Android App** - Mobile app with GPU acceleration → [See android-app/](android-app/)
+
+This repository contains both a Python script for desktop batch processing and a native Android application.
+
+## Python Script Features
 
 - Apply multiple film profiles to a single image
 - Adjustable color curves, contrast, saturation, chromatic aberration, and blur
@@ -11,6 +17,22 @@ This Python script applies various film simulation profiles to digital images, a
 - Cross-processing effect
 - Optional parallel processing for improved performance
 - Custom film profiles via JSON configuration
+
+## 📱 Android App (NEW!)
+
+A modern Android application with GPU-accelerated processing:
+
+- **12 Film Profiles** - Kodak Portra, Fuji Velvia, and more
+- **Real-time Preview** - GPU-accelerated OpenGL ES filters
+- **Material 3 Design** - Dynamic color, dark mode support
+- **Clean Architecture** - MVVM, Hilt DI, Kotlin Coroutines
+- **Status:** Phase 1-2 Complete (Foundation ready)
+
+**Get Started:** [android-app/README.md](android-app/README.md) | [Implementation Tracker](IMPLEMENTATION_TRACKER.md)
+
+---
+
+## Python Version
 
 ## Examples
 
